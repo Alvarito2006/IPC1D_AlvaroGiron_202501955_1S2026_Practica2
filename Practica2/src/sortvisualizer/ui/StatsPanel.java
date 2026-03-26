@@ -14,36 +14,45 @@ import java.awt.*;
  */
 public class StatsPanel extends JPanel {
 
+    // Colores unificados con el tema oscuro
+    private static final Color BG_PANEL     = new Color(35, 35, 45);
+    private static final Color BORDER_COLOR = new Color(60, 60, 80);
+    private static final Color TEXT_MUTED   = new Color(160, 160, 180);
+    private static final Color ACCENT_BLUE  = new Color(76, 154, 255);
+    private static final Color ACCENT_AMBER = new Color(255, 193, 7);
+    private static final Color ACCENT_GREEN = new Color(76, 175, 80);
+
     private JLabel lblComparisons;
     private JLabel lblSwaps;
     private JLabel lblIterations;
-    private JLabel lblTime;
 
     public StatsPanel() {
         initComponents();
     }
 
     private void initComponents() {
-        setLayout(new GridLayout(2, 3, 10, 5));
-        setBackground(new Color(35, 35, 50));
+        setLayout(new GridLayout(2, 3, 15, 8));
+        setBackground(BG_PANEL);
         setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(new Color(80, 80, 120)),
+                BorderFactory.createLineBorder(BORDER_COLOR),
                 "Estadísticas",
-                TitledBorder.LEFT, TitledBorder.TOP,
+                TitledBorder.LEFT,
+                TitledBorder.TOP,
                 new Font("SansSerif", Font.BOLD, 12),
-                new Color(180, 180, 220)
+                TEXT_MUTED
         ));
 
         // Crear los labels grandes de estadísticas
-        lblComparisons = createStatLabel("0", new Color(66, 133, 244));
-        lblSwaps       = createStatLabel("0", new Color(251, 188, 4));
-        lblIterations  = createStatLabel("0", new Color(52, 168, 83));
+        lblComparisons = createStatLabel("0", ACCENT_BLUE);
+        lblSwaps       = createStatLabel("0", ACCENT_AMBER);
+        lblIterations  = createStatLabel("0", ACCENT_GREEN);
 
         // Etiquetas descriptivas
         JLabel descComp = createDescLabel("Comparaciones");
         JLabel descSwap = createDescLabel("Intercambios");
         JLabel descIter = createDescLabel("Iteraciones");
 
+        // Añadir en el orden correcto (fila1: números, fila2: descripciones)
         add(lblComparisons);
         add(lblSwaps);
         add(lblIterations);
@@ -55,8 +64,9 @@ public class StatsPanel extends JPanel {
     /** Crea el label grande con el número. */
     private JLabel createStatLabel(String text, Color color) {
         JLabel lbl = new JLabel(text, SwingConstants.CENTER);
-        lbl.setFont(new Font("SansSerif", Font.BOLD, 28));
+        lbl.setFont(new Font("SansSerif", Font.BOLD, 32));
         lbl.setForeground(color);
+        lbl.setBorder(BorderFactory.createEmptyBorder(5, 0, 0, 0));
         return lbl;
     }
 
@@ -64,7 +74,8 @@ public class StatsPanel extends JPanel {
     private JLabel createDescLabel(String text) {
         JLabel lbl = new JLabel(text, SwingConstants.CENTER);
         lbl.setFont(new Font("SansSerif", Font.PLAIN, 11));
-        lbl.setForeground(new Color(160, 160, 180));
+        lbl.setForeground(TEXT_MUTED);
+        lbl.setBorder(BorderFactory.createEmptyBorder(0, 0, 5, 0));
         return lbl;
     }
 

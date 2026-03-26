@@ -16,6 +16,18 @@ import java.io.*;
  */
 public class VisualizerPanel extends JPanel {
 
+    // Colores unificados con el tema oscuro
+    private static final Color BG_DARK      = new Color(28, 28, 35);
+    private static final Color BG_PANEL     = new Color(35, 35, 45);
+    private static final Color BG_HEADER    = new Color(230, 230, 230);
+    private static final Color TEXT_LIGHT   = new Color(0, 0, 0);
+    private static final Color TEXT_MUTED   = new Color(0, 0, 0);
+    private static final Color ACCENT_BLUE  = new Color(76, 154, 255);
+    private static final Color ACCENT_GREEN = new Color(76, 175, 80);
+    private static final Color ACCENT_RED   = new Color(239, 83, 80);
+    private static final Color ACCENT_AMBER = new Color(255, 193, 7);
+    private static final Color BORDER_COLOR = new Color(60, 60, 80);
+
     // ---- Referencias a componentes ----
     private JTextArea txtInput;
     private JComboBox<String> cmbAlgorithm;
@@ -54,12 +66,12 @@ public class VisualizerPanel extends JPanel {
 
     private void initComponents() {
         setLayout(new BorderLayout(10, 10));
-        setBackground(new Color(25, 25, 38));
+        setBackground(BG_DARK);
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
         // Panel izquierdo: control + estadísticas + leyenda
         JPanel leftPanel = buildLeftPanel();
-        leftPanel.setPreferredSize(new Dimension(260, 0));
+        leftPanel.setPreferredSize(new Dimension(280, 0));
 
         // Panel derecho: gráfica + log
         JPanel rightPanel = buildRightPanel();
@@ -75,17 +87,17 @@ public class VisualizerPanel extends JPanel {
     private JPanel buildLeftPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
-        panel.setBackground(new Color(25, 25, 38));
+        panel.setBackground(BG_DARK);
 
         // Panel de control
         panel.add(buildControlPanel());
-        panel.add(Box.createVerticalStrut(10));
+        panel.add(Box.createVerticalStrut(12));
 
         // Panel de estadísticas
         statsPanel = new StatsPanel();
         statsPanel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 120));
         panel.add(statsPanel);
-        panel.add(Box.createVerticalStrut(10));
+        panel.add(Box.createVerticalStrut(12));
 
         // Leyenda de colores
         panel.add(buildLegendPanel());
@@ -95,16 +107,18 @@ public class VisualizerPanel extends JPanel {
 
     private JPanel buildControlPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
-        panel.setBackground(new Color(30, 30, 45));
+        panel.setBackground(BG_PANEL);
         panel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(new Color(80, 80, 120)),
+                BorderFactory.createLineBorder(BORDER_COLOR),
                 "Panel de Control",
-                TitledBorder.LEFT, TitledBorder.TOP,
+                TitledBorder.LEFT,
+                TitledBorder.TOP,
                 new Font("SansSerif", Font.BOLD, 12),
-                new Color(180, 180, 220)));
+                TEXT_MUTED
+        ));
 
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(4, 5, 4, 5);
+        gbc.insets = new Insets(6, 8, 6, 8);
         gbc.fill = GridBagConstraints.HORIZONTAL;
         gbc.weightx = 1.0;
 
@@ -116,24 +130,25 @@ public class VisualizerPanel extends JPanel {
         row++;
 
         txtInput = new JTextArea(2, 20);
-        txtInput.setBackground(new Color(40, 40, 60));
-        txtInput.setForeground(new Color(220, 220, 220));
-        txtInput.setCaretColor(Color.WHITE);
+        txtInput.setBackground(BG_HEADER);
+        txtInput.setForeground(TEXT_LIGHT);
+        txtInput.setCaretColor(TEXT_LIGHT);
         txtInput.setFont(new Font("Monospaced", Font.PLAIN, 12));
         txtInput.setLineWrap(true);
-        txtInput.setBorder(BorderFactory.createLineBorder(new Color(80, 80, 120)));
+        txtInput.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
         JScrollPane inputScroll = new JScrollPane(txtInput);
-        inputScroll.setPreferredSize(new Dimension(230, 45));
+        inputScroll.setPreferredSize(new Dimension(240, 45));
+        inputScroll.getViewport().setBackground(BG_HEADER);
 
         gbc.gridx = 0; gbc.gridy = row; gbc.gridwidth = 2;
         panel.add(inputScroll, gbc);
         row++;
 
         // ---- Botones cargar y aleatorio ----
-        btnLoad = createButton("Cargar", new Color(66, 133, 244));
+        btnLoad = createStyledButton("Cargar", ACCENT_BLUE);
         btnLoad.addActionListener(e -> loadDataFromText());
 
-        btnRandom = createButton("⚡ Aleatorio", new Color(103, 58, 183));
+        btnRandom = createStyledButton("⚡ Aleatorio", new Color(103, 58, 183));
         btnRandom.addActionListener(e -> generateRandom());
 
         gbc.gridx = 0; gbc.gridy = row; gbc.gridwidth = 1;
@@ -143,7 +158,7 @@ public class VisualizerPanel extends JPanel {
         row++;
 
         // ---- Botón cargar desde archivo ----
-        JButton btnFile = createButton("📂 Cargar desde .txt", new Color(80, 100, 160));
+        JButton btnFile = createStyledButton("📂 Cargar desde .txt", new Color(80, 100, 160));
         btnFile.addActionListener(e -> loadFromFile());
         gbc.gridx = 0; gbc.gridy = row; gbc.gridwidth = 2;
         panel.add(btnFile, gbc);
@@ -154,11 +169,11 @@ public class VisualizerPanel extends JPanel {
         row++;
 
         spinnerSize = new JSpinner(new SpinnerNumberModel(10, 5, 30, 1));
-        spinnerSize.setBackground(new Color(40, 40, 60));
+        spinnerSize.setBackground(BG_HEADER);
         ((JSpinner.DefaultEditor) spinnerSize.getEditor()).getTextField()
-                .setBackground(new Color(40, 40, 60));
+                .setBackground(BG_HEADER);
         ((JSpinner.DefaultEditor) spinnerSize.getEditor()).getTextField()
-                .setForeground(Color.WHITE);
+                .setForeground(TEXT_LIGHT);
         gbc.gridx = 0; gbc.gridy = row; gbc.gridwidth = 2;
         panel.add(spinnerSize, gbc);
         row++;
@@ -195,10 +210,10 @@ public class VisualizerPanel extends JPanel {
         row++;
 
         // ---- Botones Iniciar / Detener ----
-        btnStart = createButton("▶ Iniciar", new Color(52, 168, 83));
+        btnStart = createStyledButton("▶ Iniciar", ACCENT_GREEN);
         btnStart.addActionListener(e -> startSorting());
 
-        btnStop = createButton("⏹ Detener", new Color(234, 67, 53));
+        btnStop = createStyledButton("⏹ Detener", ACCENT_RED);
         btnStop.setEnabled(false);
         btnStop.addActionListener(e -> stopSorting());
 
@@ -211,20 +226,22 @@ public class VisualizerPanel extends JPanel {
     }
 
     private JPanel buildLegendPanel() {
-        JPanel panel = new JPanel(new GridLayout(2, 2, 5, 5));
-        panel.setBackground(new Color(30, 30, 45));
+        JPanel panel = new JPanel(new GridLayout(2, 2, 8, 8));
+        panel.setBackground(BG_PANEL);
         panel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(new Color(80, 80, 120)),
+                BorderFactory.createLineBorder(BORDER_COLOR),
                 "Leyenda",
-                TitledBorder.LEFT, TitledBorder.TOP,
+                TitledBorder.LEFT,
+                TitledBorder.TOP,
                 new Font("SansSerif", Font.BOLD, 11),
-                new Color(180, 180, 220)));
-        panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
+                TEXT_MUTED
+        ));
+        panel.setMaximumSize(new Dimension(Integer.MAX_VALUE, 85));
 
-        panel.add(createLegendItem("Normal", new Color(66, 133, 244)));
-        panel.add(createLegendItem("Comparando", new Color(251, 188, 4)));
-        panel.add(createLegendItem("Intercambiando", new Color(234, 67, 53)));
-        panel.add(createLegendItem("Ordenado", new Color(52, 168, 83)));
+        panel.add(createLegendItem("Normal", ACCENT_BLUE));
+        panel.add(createLegendItem("Comparando", ACCENT_AMBER));
+        panel.add(createLegendItem("Intercambiando", ACCENT_RED));
+        panel.add(createLegendItem("Ordenado", ACCENT_GREEN));
 
         return panel;
     }
@@ -242,7 +259,7 @@ public class VisualizerPanel extends JPanel {
 
     private JPanel buildRightPanel() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
-        panel.setBackground(new Color(25, 25, 38));
+        panel.setBackground(BG_DARK);
 
         // Gráfica de barras
         chartPanel = new BarChartPanel();
@@ -250,24 +267,27 @@ public class VisualizerPanel extends JPanel {
 
         // Log de operaciones
         JPanel logPanel = new JPanel(new BorderLayout());
-        logPanel.setBackground(new Color(25, 25, 38));
+        logPanel.setBackground(BG_DARK);
         logPanel.setPreferredSize(new Dimension(0, 160));
         logPanel.setBorder(BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(new Color(80, 80, 120)),
+                BorderFactory.createLineBorder(BORDER_COLOR),
                 "Log de Operaciones",
-                TitledBorder.LEFT, TitledBorder.TOP,
+                TitledBorder.LEFT,
+                TitledBorder.TOP,
                 new Font("SansSerif", Font.BOLD, 12),
-                new Color(180, 180, 220)));
+                TEXT_MUTED
+        ));
 
         logArea = new JTextArea();
         logArea.setEditable(false);
-        logArea.setBackground(new Color(15, 15, 25));
-        logArea.setForeground(new Color(180, 220, 180));
+        logArea.setBackground(BG_HEADER);
+        logArea.setForeground(new Color(0, 0, 0));
         logArea.setFont(new Font("Monospaced", Font.PLAIN, 11));
-        logArea.setCaretColor(Color.WHITE);
+        logArea.setCaretColor(TEXT_LIGHT);
 
         JScrollPane logScroll = new JScrollPane(logArea);
-        logScroll.getViewport().setBackground(new Color(15, 15, 25));
+        logScroll.getViewport().setBackground(BG_HEADER);
+        logScroll.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
         logPanel.add(logScroll, BorderLayout.CENTER);
 
         panel.add(logPanel, BorderLayout.SOUTH);
@@ -601,26 +621,42 @@ public class VisualizerPanel extends JPanel {
 
     private JLabel createLabel(String text) {
         JLabel lbl = new JLabel(text);
-        lbl.setForeground(new Color(160, 160, 200));
+        lbl.setForeground(TEXT_MUTED);
         lbl.setFont(new Font("SansSerif", Font.PLAIN, 11));
         return lbl;
     }
 
-    private JButton createButton(String text, Color bg) {
+    /**
+     * Crea un botón con estilo moderno, bordes redondeados y efecto hover.
+     * El texto se muestra en negro para mejor contraste.
+     */
+    private JButton createStyledButton(String text, Color bg) {
         JButton btn = new JButton(text);
         btn.setBackground(bg);
-        btn.setForeground(Color.WHITE);
+        btn.setForeground(Color.BLACK);  
         btn.setFont(new Font("SansSerif", Font.BOLD, 12));
         btn.setFocusPainted(false);
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        btn.setBorder(BorderFactory.createEmptyBorder(6, 10, 6, 10));
+        btn.setBorder(BorderFactory.createCompoundBorder(
+                BorderFactory.createLineBorder(bg.darker(), 1),
+                BorderFactory.createEmptyBorder(6, 12, 6, 12)
+        ));
+        btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                btn.setBackground(bg.brighter());
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                btn.setBackground(bg);
+            }
+        });
         return btn;
     }
 
     private void styleComboBox(JComboBox<String> cmb) {
-        cmb.setBackground(new Color(40, 40, 65));
-        cmb.setForeground(Color.WHITE);
+        cmb.setBackground(BG_HEADER);
+        cmb.setForeground(TEXT_LIGHT);
         cmb.setFont(new Font("SansSerif", Font.PLAIN, 12));
         cmb.setFocusable(false);
+        cmb.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
     }
 }
