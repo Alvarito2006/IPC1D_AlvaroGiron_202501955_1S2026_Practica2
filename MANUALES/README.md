@@ -1,1 +1,0 @@
-# IPC1D_AlvaroGiron_202501955_1S2026_Practica2
