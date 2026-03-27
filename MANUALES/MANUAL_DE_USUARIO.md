@@ -78,7 +78,7 @@ o
 <img width="407" height="607" alt="image" src="https://github.com/user-attachments/assets/40236eae-8375-4c30-8165-0ada7202e1f3" />
 
 
-Los números se cargarán automáticamente en el arreglo y se actualizará la gráfica. :contentReference[oaicite:8]{index=8}
+Los números se cargarán automáticamente en el arreglo y se actualizará la gráfica.
 
 
 <img width="406" height="608" alt="image" src="https://github.com/user-attachments/assets/fef7170f-896b-45d8-af38-5ea2e14c49ba" />
